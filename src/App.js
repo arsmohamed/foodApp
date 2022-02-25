@@ -10,17 +10,28 @@ import {getPlacesData } from './api/index';
 const App = () => {
   const [places, setPlaces] = useState([]);
   
-  const [coordinated, setCoordinates] = useState({lat: 47.560539, lng: -52.712830});
-  const [boundarries, setBoundarries] = useState(null);
+  const [coordinates, setCoordinates] = useState({});
+  const [boundarries, setBoundarries] = useState({});
 
+  // getting the user location once open the web app and no need to rerender the useeffect
+  //use coordinate use the bluid in browser G-location API
+  //using the empty prases in case we dont need the useEffect to reload 
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(( {coords: {latitude, longitude}}) => {
+      setCoordinates({lat: latitude, lng: longitude})
+    })
+  },[]); 
 
   useEffect(() => {
-    getPlacesData()
-    .then((data) => {
-     console.log(data) 
-    })
-  },
-  []);
+     
+    getPlacesData(boundarries.ne, boundarries.sw)
+      .then((data) => {
+        console.log(data);
+
+        setPlaces(data)
+      })
+
+  },[coordinates, boundarries]);
 
   return (
     <>
@@ -34,7 +45,7 @@ const App = () => {
             <Map
               GetsetCoordinates={setCoordinates} // to change the value of the coordinates
               GetsetBoundarries={setBoundarries} // to change the value of the boundaries
-              theCoordinated={coordinated} //the coordinated states
+              thecoordinates={coordinates} //the coordinates states
             />
           </Grid>
         </Grid>

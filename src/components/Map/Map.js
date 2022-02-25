@@ -7,7 +7,7 @@ import Rating from '@material-ui/lab/Rating';
 // import mapStyles from '../../mapStyles';
 import useStyles from './style.js';
 
-const Map = ( {GetsetCoordinates ,GetsetBoundarries ,theCoordinated} ) => {
+const Map = ( {GetsetCoordinates ,GetsetBoundarries ,thecoordinates} ) => {
 
     const matches = useMediaQuery('(min-width:600px)'); // this means that the matches will set to false if the width is larger than 600px
     const classes = useStyles();
@@ -16,8 +16,8 @@ const Map = ( {GetsetCoordinates ,GetsetBoundarries ,theCoordinated} ) => {
     <div className={classes.mapContainer}>
       <GoogleMapReact 
         bootstrapURLKeys={{ key : "AIzaSyBSamNSBJS5Jf7plaK3sd0WYimxT9L6ZA0" }}
-        defaultCenter= {theCoordinated} //center of the map
-        center= {theCoordinated}
+        defaultCenter= {thecoordinates} //center of the map
+        center= {thecoordinates}
         defaultZoom= {11}
         margin= {[50, 50, 50, 50]}
         options={''}
