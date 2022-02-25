@@ -7,9 +7,9 @@ import Rating from '@material-ui/lab/Rating';
 // import mapStyles from '../../mapStyles';
 import useStyles from './style.js';
 
-const Map = ( {GetsetCoordinates ,GetsetBoundarries ,thecoordinates} ) => {
+const Map = ( {GetsetCoordinates ,GetsetBoundarries ,thecoordinates, places, setchildClicked} ) => {
 
-    const matches = useMediaQuery('(min-width:600px)'); // this means that the matches will set to false if the width is larger than 600px
+    const isMobile = useMediaQuery('(min-width:600px)'); // this means that the matches will set to false if the width is larger than 600px
     const classes = useStyles();
 
   return (
@@ -25,9 +25,32 @@ const Map = ( {GetsetCoordinates ,GetsetBoundarries ,thecoordinates} ) => {
           GetsetCoordinates({lat: e.center.lat, lng: e.center.lng})
           GetsetBoundarries({ne: e.marginBounds.ne, sw: e.marginBounds.sw})
         }} //checking if there is any changes in the coordinated then we change the props 
-        onChildClick= {''} //when click on a resturant on a map
+        onChildClick= {(child) => {
+          setchildClicked(child)
+        }} //when click on a resturant on a map
       >
-
+        {places?.map((place, i) => (
+          <div
+            className={classes.markerContainer}
+            lat={Number(place.latitude)} //Number constructor to change the sting to number 
+            lng={Number(place.longitude)} //Number constructor to change the sting to number 
+            key={i}
+          >
+            {
+              !isMobile
+                ? (<LocationOnOutlinedIcon color="primary" fontSize="large" />)
+                : (<Paper elevation={3} className={classes.paper}>
+                    <Typography className={classes.typography} variant="subtitle2" gutterBottom> {place.name}</Typography>
+                    <img
+                      className={classes.pointer}
+                      src={place.photo ? place.photo.images.large.url : 'https://www.foodserviceandhospitality.com/wp-content/uploads/2016/09/Restaurant-Placeholder-001.jpg'}
+                      alt={[place.name]}
+                    />
+                    <Rating name="read-only" size="small" value={Number(place.rating)} readOnly />
+                  </Paper>)
+            }}
+          </div>
+        ))}
       </GoogleMapReact>
     </div> 
   );
